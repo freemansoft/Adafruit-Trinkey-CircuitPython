@@ -1,3 +1,0 @@
-import storage
-
-storage.remount("/")
