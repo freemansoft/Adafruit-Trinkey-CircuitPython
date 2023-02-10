@@ -16,6 +16,7 @@ class MyDevice(Device):
         from adafruit_hid.keycode import Keycode
         import neopixel
 
+        # ===> These variables are not mutated by the functions
         keyboard = Keyboard(usb_hid.devices)
         keyboard_layout = KeyboardLayoutUS(keyboard)
 
@@ -29,6 +30,7 @@ class MyDevice(Device):
         cycle_length_tics = 99  # loop cycle time --> blink cycle length
         cycle_blank_length_tics = cycle_length_tics // 3  # blanking time
 
+        # ===> These variables are shared and need to be global in the functions
         current_color = default_color  # button color or default_color
         current_tics = 0
 
@@ -91,5 +93,5 @@ class MyDevice(Device):
             current_color = (0, 0, 0)
             pixels.fill(current_color)
             current_color = default_color
-        # don't need this because we're a LOT slower coming form the host
+        # don't need this in belay because we're a LOT slower coming form the host
         # time.sleep(0.002)  # increases latency - alternative is to increase tics
