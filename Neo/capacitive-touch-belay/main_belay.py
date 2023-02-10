@@ -7,6 +7,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--port", "-p", default="/dev/ttyUSB0")
 args = parser.parse_args()
 
+print("starting setup")
 device = MyDevice(args.port)
 
 print("starting loop")
