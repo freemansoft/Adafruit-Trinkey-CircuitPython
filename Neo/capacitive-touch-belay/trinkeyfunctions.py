@@ -30,7 +30,7 @@ class MyDevice(Device):
         cycle_length_tics = 99  # loop cycle time --> blink cycle length
         cycle_blank_length_tics = cycle_length_tics // 3  # blanking time
 
-        # ===> These variables are shared and need to be global in the functions
+        # ==> These variables are shared and must be global in the functions
         current_color = default_color  # button color or default_color
         current_tics = 0
 
@@ -46,8 +46,8 @@ class MyDevice(Device):
             while touch1.value:  # Wait for release...
                 time.sleep(0.1)
             keyboard.send(Keycode.WINDOWS, Keycode.L)  # Then send key press.
-            current_color = (20, 0, 0)  # flash pattern will run with this color
-            current_tics = 0  # reset tic counter so get a full cycle in this color
+            current_color = (20, 0, 0)  # flash pattern will use this color
+            current_tics = 0  # reset counter ato get full cycle in this color
             print("Touch 1 Event")
         if touch2.value:  # If touch pad 2 is touched...
             current_color = (2, 2, 0)  # show touch detected
@@ -55,8 +55,8 @@ class MyDevice(Device):
             while touch2.value:  # Wait for release...
                 time.sleep(0.1)
             keyboard.send(Keycode.CONTROL, Keycode.ALT, Keycode.DELETE)
-            current_color = (20, 20, 0)  # flash pattern will run with this color
-            current_tics = 0  # reset tic counter so get a full cycle in this color
+            current_color = (20, 20, 0)  # flash pattern will use this color
+            current_tics = 0  # reset counter ato get full cycle in this color
             print("Touch 2 Event")
             # Other HID keyboard possible actions
             # keyboard_layout.write("Hello World!\n")  # Then send string.
@@ -67,7 +67,7 @@ class MyDevice(Device):
         global current_color
         global current_tics
         # This is totally Brute Force and Ignorance (BFI)
-        # blanks and resets color in last cycle_blank_length_tics through the cycle
+        # blank and reset color in last cycle_blank_length_tics of the cycle
         # three different led configurations - each 1/3 of non blank cycle
         # increments but rolls over the current tics if at end of cycle
         current_tics = (current_tics + 1) % cycle_length_tics
@@ -93,5 +93,5 @@ class MyDevice(Device):
             current_color = (0, 0, 0)
             pixels.fill(current_color)
             current_color = default_color
-        # don't need this in belay because we're a LOT slower coming form the host
-        # time.sleep(0.002)  # increases latency - alternative is to increase tics
+        # don't need this in belay because commands from host are a LOT slower
+        # time.sleep(0.002)  # increases latency - alternative to increase tics
