@@ -25,7 +25,8 @@ class MyDevice(Device):
         pixels = neopixel.NeoPixel(board.NEOPIXEL, 4)
 
         default_color = (1, 1, 1)  # color when button not pressed
-        cycle_length_tics = 600  # loop cycle time --> blink cycle length
+        # this value is 600 when running all on the device
+        cycle_length_tics = 99  # loop cycle time --> blink cycle length
         cycle_blank_length_tics = cycle_length_tics // 3  # blanking time
 
         current_color = default_color  # button color or default_color
@@ -33,6 +34,10 @@ class MyDevice(Device):
 
     @Device.task
     def try_touch():
+        # mark any updatable shared state variables as global
+        global current_color
+        global current_tics
+
         if touch1.value:  # If touch pad 1 is touched...
             current_color = (2, 0, 0)  # show touch detected
             pixels.fill(current_color)  # keep showing until not touching
@@ -56,6 +61,9 @@ class MyDevice(Device):
 
     @Device.task
     def color_tic():
+        # mark any updatable shared state variables as global
+        global current_color
+        global current_tics
         # This is totally Brute Force and Ignorance (BFI)
         # blanks and resets color in last cycle_blank_length_tics through the cycle
         # three different led configurations - each 1/3 of non blank cycle
@@ -83,19 +91,5 @@ class MyDevice(Device):
             current_color = (0, 0, 0)
             pixels.fill(current_color)
             current_color = default_color
-        time.sleep(0.002)  # increases latency - alternative is to increase tics
-
-    @Device.task
-    def print_vars():
-        print("---> print_vars() --------->")
-        print("keybaord: " + str(keyboard))
-        print("keyboard_layout: " + str(keyboard_layout))
-        print(touch1)
-        print(touch2)
-        print("pixels: " + str(pixels))
-        print("default_color: " + str(default_color))
-        print("current_color: " + str(current_color))
-        print("cycle_length_tics:" + str(cycle_length_tics))
-        print("cycle_blank_length_tics: " + str(cycle_blank_length_tics))
-        print("current_tics: " + str(current_tics))
-        print("<---print_vars() <---------")
+        # don't need this because we're a LOT slower coming form the host
+        # time.sleep(0.002)  # increases latency - alternative is to increase tics
