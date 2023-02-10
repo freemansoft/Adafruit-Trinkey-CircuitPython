@@ -24,9 +24,10 @@ touch2 = touchio.TouchIn(board.TOUCH2)
 pixels = neopixel.NeoPixel(board.NEOPIXEL, 4)
 
 default_color = (1, 1, 1)  # color when button not pressed
-current_color = default_color  # button color or default_color
 cycle_length_tics = 600  # loop cycle time --> blink cycle length
 cycle_blank_length_tics = cycle_length_tics // 3  # blanking time
+
+current_color = default_color  # button color or default_color
 current_tics = 0
 
 while True:

@@ -25,11 +25,13 @@ class MyDevice(Device):
         pixels = neopixel.NeoPixel(board.NEOPIXEL, 4)
 
         default_color = (1, 1, 1)  # color when button not pressed
-        current_color = default_color  # button color or default_color
         cycle_length_tics = 600  # loop cycle time --> blink cycle length
         cycle_blank_length_tics = cycle_length_tics // 3  # blanking time
+
+        current_color = default_color  # button color or default_color
         current_tics = 0
 
+    @Device.task
     def try_touch():
         if touch1.value:  # If touch pad 1 is touched...
             current_color = (2, 0, 0)  # show touch detected
@@ -39,8 +41,7 @@ class MyDevice(Device):
             keyboard.send(Keycode.WINDOWS, Keycode.L)  # Then send key press.
             current_color = (20, 0, 0)  # flash pattern will run with this color
             current_tics = 0  # reset tic counter so get a full cycle in this color
-            print("Touch 1")
-
+            print("Touch 1 Event")
         if touch2.value:  # If touch pad 2 is touched...
             current_color = (2, 2, 0)  # show touch detected
             pixels.fill(current_color)  # keep showing until not touching
@@ -49,10 +50,11 @@ class MyDevice(Device):
             keyboard.send(Keycode.CONTROL, Keycode.ALT, Keycode.DELETE)
             current_color = (20, 20, 0)  # flash pattern will run with this color
             current_tics = 0  # reset tic counter so get a full cycle in this color
-            print("Touch 2")
+            print("Touch 2 Event")
             # Other HID keyboard possible actions
             # keyboard_layout.write("Hello World!\n")  # Then send string.
 
+    @Device.task
     def color_tic():
         # This is totally Brute Force and Ignorance (BFI)
         # blanks and resets color in last cycle_blank_length_tics through the cycle
@@ -82,3 +84,18 @@ class MyDevice(Device):
             pixels.fill(current_color)
             current_color = default_color
         time.sleep(0.002)  # increases latency - alternative is to increase tics
+
+    @Device.task
+    def print_vars():
+        print("---> print_vars() --------->")
+        print("keybaord: " + str(keyboard))
+        print("keyboard_layout: " + str(keyboard_layout))
+        print(touch1)
+        print(touch2)
+        print("pixels: " + str(pixels))
+        print("default_color: " + str(default_color))
+        print("current_color: " + str(current_color))
+        print("cycle_length_tics:" + str(cycle_length_tics))
+        print("cycle_blank_length_tics: " + str(cycle_blank_length_tics))
+        print("current_tics: " + str(current_tics))
+        print("<---print_vars() <---------")
