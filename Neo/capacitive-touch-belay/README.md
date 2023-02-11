@@ -12,7 +12,7 @@
 # Flow
 
 ```mermaid
-graph TD
+flowchart LR
     subgraph pc[On the PC]
         subgraph main_belay.py
             Startup --> initialize[Initialize MyDevice]
