@@ -1,4 +1,7 @@
-## Capacitive touch run with Belay.
+## Capacitive touch run with Belay
+
+# Prequisites
+1. Trinkey Neo running CircuitPython
 
 # Running
 1. Run `python3 main_belay.py -p <com-port>` to start execution
@@ -35,7 +38,7 @@ flowchart LR
         end
         subgraph trinkeyfunctions[MyDevice Functions]
             try_touch[def try_touch]
-            color_tic[def color_tich]
+            color_tic[def color_tic]
         end
     end
 

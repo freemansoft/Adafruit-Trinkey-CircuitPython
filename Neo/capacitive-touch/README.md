@@ -1,6 +1,9 @@
 # Files
 * `main.py` A more elaborate version of the flashing capacitive touch demo from the Adafruit Learning site https://learn.adafruit.com/adafruit-neo-trinkey/capacitive-touch-hid
 
+# Prerequisintes
+1. Trinkey Neo running CircuitPython
+
 # Running
 1. copy `main.py` to the CIRCUITPYTHON drive
 
