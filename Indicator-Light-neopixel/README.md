@@ -45,9 +45,8 @@ _device_ in the following steps refers to to the circuitpython board
 
 ## Pixel Control Message explained
 The board accepts a string over the serial port that is terminated by a newline. That string specifies LED steps which are patterns and pattern duration. The message can can accept an arbitrary number of steps followed by a newline.
-```
-#<led><red><green><blue>-<time in msec>\n
-```
+
+`#<led><red><green><blue>-<time in msec>\n`
 
 New commands completely replace the previous patterns. The command is terminated by a new line `\n`
 

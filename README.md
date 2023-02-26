@@ -1,6 +1,6 @@
 # Adafruit Trinkey Sandbox
 
-Really a place to not lose any work with the Trinkey
+Explorations on the [Adafruit Neo Trinkey - SAMD21 USB Key with 4 NeoPixels](https://www.adafruit.com/product/4870) using CircuitPython as Adafruit intended!
 
 ## projects
 1. `capacitive-touch` the copacitive touch demo with better LED control
