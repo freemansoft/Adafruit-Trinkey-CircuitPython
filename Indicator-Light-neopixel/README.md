@@ -2,7 +2,7 @@
 This is a **CircuitPython** program that controls a neopixel string over a serial port.  It was written for the [Adafruit Trinkey Neo](https://www.adafruit.com/product/4870) with 4 Neopixels on it.
 
 ## Prerequisites
-Requires the following added to `CIRCUITPY/lib`.  
+Requires the following added to `CIRCUITPY/lib`.
 * `adafruit_logging`
     * Available as a single .mpy file in the Adafruit library
 * `neopixel`
@@ -34,8 +34,17 @@ Requires the following added to `CIRCUITPY/lib`.
 | - | - | - | - |
 | Trinkey Neo | 4 independently addressable pixels supports | board.NEOPIXEL | VID 239A  PID 80  |
 
-## Communication format
-The board accepts a string over the serial port that is terminated by a newline. That string specifies LED steps which are patterns and pattern duration. The message can can accept an arbitrary number of steps followed by a newline. 
+## Commands
+| Command | Action |
+| - | - |
+| ? | show commands |
+| # | pixel control with optonal duration - See _Pixel Control Message_ |
+| G | Get current pixel |
+| B | Blank all pixels |
+
+
+## Pixel Control Message explained
+The board accepts a string over the serial port that is terminated by a newline. That string specifies LED steps which are patterns and pattern duration. The message can can accept an arbitrary number of steps followed by a newline.
 ```
 #<led><red><green><blue>-<time in msec>\n
 ```
@@ -46,12 +55,12 @@ The different parts of a command string are as followed
 | paramter | function | notes |
 | - | - | - |
 | `#` | command initiator and step separator | multiple steps are separated by the `#`
-| `<led>` | bit mask of pixels to be touched - each bit is a pixel| Only allows max 8 neopixels because `led` is two hex digits - led value of `ff` means set all leds |
+| `<led>` | bit mask of pixels to be touched in this step. Each bit is a pixel | Only allows max 8 neopixels because `led` is two hex digits - led value of `ff` means set all leds |
 | `<red><green><blue>` | the RGB values 0-255 | in hex |
 | `<time in msec>` | value of 0 defaults to 1000 |  period defaults to 1000 msec if no time provided
 | `\n` | command terminator | just the new line |
 
-## Sample test data
+### Sample test data
 You can copy and paste these strings into a terminal prompt
 
 | Sample | Expected results |

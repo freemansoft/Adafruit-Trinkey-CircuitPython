@@ -143,7 +143,7 @@ class CommandProcessor:
         except ValueError as e:
             # self.logger.error(e)
             self.logger.error(f"invalid command: {command_string}")
-            return ColorStep(0, (0, 0, 0), 0)
+            return ColorStep(0xFF, (0, 0, 0), 0)
 
 
 class PixelControl:
@@ -168,7 +168,13 @@ class PixelControl:
             # ignore the led for now
             self.pixels.fill(a_color_step.rgb)
         else:
-            self.pixels[a_color_step.led] = a_color_step.rgb
+            working_led = a_color_step.led
+            working_led_index = 0
+            while working_led != 0:
+                if working_led & 1 == 1:
+                    self.pixels[working_led_index] = a_color_step.rgb
+                working_led = working_led >> 1
+                working_led_index += 1
             self.pixels.write()
 
 
@@ -186,7 +192,7 @@ def main(neopixel_pin, neopixel_count, log_level):
     pixels = neopixel.NeoPixel(neopixel_pin, neopixel_count)
     pixel_control = PixelControl(pixels, logger)
 
-    active_patterns = [ColorStep(0, (0, 0, 0), 1000)]
+    active_patterns = [ColorStep(0xFF, (0, 0, 0), 1000)]
     active_pattern_index = 0
 
     # TODO: Fix this complete and utter hack
@@ -217,9 +223,17 @@ def main(neopixel_pin, neopixel_count, log_level):
                         pass  # ignore empty
                 pixel_control.updateColor(active_patterns[active_pattern_index])
             elif mystr == "?":
-                print("Usage:")
+                print("Usage: [? | # | b]")
+                print("?: this help")
+                print("B: blank pixels")
+                print("G: get current color and status")
                 print("#nnrrggbb-msec#nnrrggbb-msec")
                 print("#ff400000-1000#ff000040-1000")
+            elif mystr == "B":
+                # blank
+                active_patterns = [(ColorStep(0xFF, (0, 0, 0), 1000))]
+                active_pattern_index = 0
+                pixel_control.updateColor(active_patterns[0])
             elif mystr == "G":
                 print(active_patterns[active_pattern_index])
             else:
