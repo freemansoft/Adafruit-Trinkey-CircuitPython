@@ -117,6 +117,7 @@ class CommandProcessor:
             return 0
 
     def colorSpecified(self, color_segment):
+        """returns None if invalid color"""
         try:
             red = int(color_segment[2:4], 16)
             green = int(color_segment[4:6], 16)
@@ -125,11 +126,12 @@ class CommandProcessor:
         except ValueError as e:
             # self.logger.error(e)
             self.logger.error(f"invalid color: {color_segment}")
-            return (0, 0, 0)
+            raise e
 
     def processCommand(self, command_string):
         """
         returns a tuple (led_number, (r,g,b), hold_time)
+        returns None if nothing could be processed
         """
         self.logger.debug(f"processing: {command_string}")
         command_segements = command_string.split("-")
@@ -143,7 +145,7 @@ class CommandProcessor:
         except ValueError as e:
             # self.logger.error(e)
             self.logger.error(f"invalid command: {command_string}")
-            return ColorStep(0xFF, (0, 0, 0), 0)
+            return None
 
 
 class PixelControl:
@@ -178,7 +180,7 @@ class PixelControl:
             self.pixels.write()
 
 
-def main(neopixel_pin, neopixel_count, log_level):
+def main(neopixel_pin, neopixel_count, default_step, log_level):
     import adafruit_logging as logging
 
     logger = logging.getLogger("main")
@@ -192,7 +194,7 @@ def main(neopixel_pin, neopixel_count, log_level):
     pixels = neopixel.NeoPixel(neopixel_pin, neopixel_count)
     pixel_control = PixelControl(pixels, logger)
 
-    active_patterns = [ColorStep(0xFF, (0, 0, 0), 1000)]
+    active_patterns = [default_step]
     active_pattern_index = 0
 
     # TODO: Fix this complete and utter hack
@@ -215,9 +217,14 @@ def main(neopixel_pin, neopixel_count, log_level):
                 patterns = mystr.split("#")
                 logger.debug(f"patterns: {patterns}")
                 for pattern in patterns:
-                    if len(pattern) > 0:
+                    if len(pattern) > 0:  # optimization
                         a_color_step = color_command.processCommand(pattern)
-                        active_patterns.append(a_color_step)
+                        # retain the requested number of steps even if an invalid step provided
+                        # invalid are replaced with the default
+                        if a_color_step:
+                            active_patterns.append(a_color_step)
+                        else:
+                            active_patterns.append(default_step)
                         logger.debug(f"active_patterns: {active_patterns}")
                     else:
                         pass  # ignore empty
@@ -231,7 +238,7 @@ def main(neopixel_pin, neopixel_count, log_level):
                 print("#ff400000-1000#ff000040-1000")
             elif mystr == "B":
                 # blank
-                active_patterns = [(ColorStep(0xFF, (0, 0, 0), 1000))]
+                active_patterns = [default_step]
                 active_pattern_index = 0
                 pixel_control.updateColor(active_patterns[0])
             elif mystr == "G":
@@ -258,4 +265,7 @@ def main(neopixel_pin, neopixel_count, log_level):
 import adafruit_logging as logging
 
 # Set this to logging.DEBUG if you want to see what is happening
-main(board.NEOPIXEL, 8, logging.INFO)
+target_neopixels = board.NEOPIXEL
+num_neopixels = 8  # max we support anyway
+default_step = ColorStep(0xFF, (0, 0, 0), 1000)
+main(target_neopixels, num_neopixels, default_step, logging.INFO)

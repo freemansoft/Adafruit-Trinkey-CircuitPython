@@ -22,14 +22,15 @@ _device_ in the following steps refers to to the circuitpython board
 ## TODO
 1. Add smooth fade between colors in transition
 1. Add support for RGB led (non-neopixels)
-1. Add support for add on neopixels
+1. Add support for supplementary neopixels
     1. Currently supported by passing a different pin into main()
 1. Evaluate extending support to more than 8 pixels because of 8 bit pixel mask in command.
 1. Look at using a clock rather than hacking the wait tic count in the timer sleep
 
 ## Customization
-1. Set the logging level to logging.DEBUG in the call to main() at the bottom of this file
-1. Set the Neopixel pin object and pixel count in the call to main() at the bottom of this file
+1. Set the logging level to logging.DEBUG in the call to `main()` at the bottom of `main.py`
+1. Set the Neopixel pin object and pixel count in the call to `main()` at the bottom of `main.py`
+1. Change the default color from blank to something else in the call to `main()` at the bottom of `main.py`
 
 ## Tested on
 | Board | Functionality | Neopixel location |  USB VID and PID |
@@ -56,27 +57,55 @@ The different parts of a command string are as followed
 | paramter | function | notes |
 | - | - | - |
 | `#` | command initiator and step separator | multiple steps are separated by the `#`
-| `<led>` | bit mask of pixels to be touched in this step. Each bit is a pixel | Only allows max 8 neopixels because `led` is two hex digits - led value of `ff` means set all leds |
+| `<led>` | bit mask of pixels to be touched in this step. Each bit is a pixel | Only allows max 8 neopixels because `led` is two hex digits |
 | `<red><green><blue>` | the RGB values 0-255 | in hex |
 | `<time in msec>` | value of 0 defaults to 1000 |  period defaults to 1000 msec if no time provided
 | `\n` | command terminator | just the new line |
+
+LED Values
+* An led value of `ff` means set all LEDs.
+* An led value of `00` affects no LEDs and becomes a delay no-op
+
+```mermaid
+flowchart TD
+subgraph Command[String Commands]
+X["#nnrrggbb-dddd"]
+Y["#nnrrggbb-dddd"]
+Z["#nnrrggbb-dddd"]
+end
+```
+becomes
+```mermaid
+flowchart TD
+subgraph StepSet["Step Set"]
+A["ColorStep(led bitmask,(rr,gg,bb),duration msec)"]
+B["ColorStep(led bitmask,(rr,gg,bb),duration msec)"]
+C["ColorStep(led bitmask,(rr,gg,bb),duration msec)"]
+end
+```
 
 ### Sample test data
 You can copy and paste these strings into a terminal prompt
 
 | Sample | Expected results |
 | - | - |
-| `#ff000000` | Blank all pixels |
-| `#ff010222` | All pixels to the same color |
-| `#02A1A2A3-0088` | Third pixel changes to this color and holds for 88 msec |
-| `#ff010203#ff110000` | All pixels switch between these two colors on 1000 msec intervals
-| `#ffA1A200-400#ff0040E3-1000` | All pixels lternate between two color in asymmetrical periods |
-| `#ff010200-400#02004023-400#03000000-300` | 3 step pattern that mixes full and individual pixel updates |
-| `#ff000000-10#00050505-200#01100000-400#02001000-400#0C000010-400` | Clear the colors. Individually update 0 and 1 | set 2 and 3 (bit 4 and 8 ) at same time |
-| `#ffA1A2A300-8888#ffE1E2E3-0010` | Bad Data that is accepted because the bad data is _extra |
-| `#000000` | Bad data not accepted |
-| `#ffJJJJJJ00` | Bad data not accepted |
-| `#04A1A2A3-X8888#00E1E2E3-0010`| Bad data non hex characters |
+| `#ff000000`                                  | Blank all pixels |
+| `#ff010222`                                  | All pixels to the same color |
+| `#02A1A2A3-0088`                             | Third pixel changes to this color and holds for 88 msec |
+| `#ff010203#ff110000`                         | All pixels switch between these two colors on 1000 msec intervals
+| `#ffA1A200-400#ff0040E3-1000`                | All pixels lternate between two color in asymmetrical periods |
+| `#ff010200-400#02004023-400#03000000-300`    | 3 step pattern that mixes full and individual pixel updates |
+| `#ff010200-400 #00004023-1000 #03000000-300` | 3 step pattern that mixes full and individual pixel updates |
+| `#ff000000-100 #01050505-400 #02100000-400 #04081000-400 #0c000010-400` | Clear the colors. Individually update 0 and 1 | set 2 and 3 (bit 4 and 8 ) at same time |
+
+### Bad test data
+| Sample | Expected results |
+| - | - |
+| `#ff01020300-080#ffE1E2E3-0010` | Accepted because _extra_ data in a step is ignored |
+| `#000000`                       | Incomplete data. Not accepted |
+| `#ffJJJJJJ00`                   | Invalid Numeric. Not accepted |
+| `#04A1A2A3-X8888#00E1E2E3-0010` | Non hex characters. Not Accepted |
+| `#00000000`                     | Accepted. Essentially a No-Op because no LED is is changed |
 
 ## References
 
