@@ -70,4 +70,4 @@ You can copy and paste these strings into a terminal prompt
 
 ## References
 
-This was created to see if the Adafruit Neo Trinkey could be integrated with various busylight software like https://github.com/JnyJny/busylight . I was able to add a driver to busylight to support this board in a busylight fork.
+This was created to see if the Adafruit Neo Trinkey could be integrated with various busylight software like https://github.com/JnyJny/busylight . That software works with USB attached devices and binds to them with the Vendor ID (VID) an Product ID (PID). It turns out that works fine for the Adafruit boards with real VIDs and PIDS. I was able to add a driver to busylight to support this board in a busylight fork.
