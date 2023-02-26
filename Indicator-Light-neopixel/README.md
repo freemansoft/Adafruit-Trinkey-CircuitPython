@@ -35,7 +35,8 @@ _device_ in the following steps refers to to the circuitpython board
 ## Tested on
 | Board | Functionality | Neopixel location |  USB VID and PID |
 | - | - | - | - |
-| Trinkey Neo | 4 independently addressable pixels supports | board.NEOPIXEL | VID 239A  PID 80  |
+| Adafruit Trinkey Neo | 4 independently addressable pixels supports | board.NEOPIXEL | VID 239A  PID 80  |
+| Adafruit QT PY ESP32-S2 | one small pixel | board.NEOPIXEL | _not captured_ |
 
 ## Commands
 | Command | Action |
@@ -107,6 +108,15 @@ You can copy and paste these strings into a terminal prompt
 | `#04A1A2A3-X8888#00E1E2E3-0010` | Non hex characters. Not Accepted |
 | `#00000000`                     | Accepted. Essentially a No-Op because no LED is is changed |
 
+```mermaid
+flowchart TD
+subgraph UsedFor["Used For"]
+a["print()\nUsed only for command line help"]
+b["logger.debug()\nDisabled by default\nUseful for triage" ]
+c["logger.info()\nReady for input prompt"]
+d["logger.error()\nEnabled by default" ]
+end
+```
 ## References
 
 This was created to see if the Adafruit Neo Trinkey could be integrated with various busylight software like https://github.com/JnyJny/busylight . That software works with USB attached devices and binds to them with the Vendor ID (VID) an Product ID (PID). It turns out that works fine for the Adafruit boards with real VIDs and PIDS. I was able to add a driver to busylight to support this board in a busylight fork.
