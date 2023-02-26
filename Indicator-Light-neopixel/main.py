@@ -180,11 +180,8 @@ class PixelControl:
             self.pixels.write()
 
 
-def main(neopixel_pin, neopixel_count, default_step, log_level):
+def main(neopixel_pin, neopixel_count, default_step, logger):
     import adafruit_logging as logging
-
-    logger = logging.getLogger("main")
-    logger.setLevel(log_level)
 
     usb_reader = USBSerialReader(logger)
     color_command = CommandProcessor(logger)
@@ -201,7 +198,7 @@ def main(neopixel_pin, neopixel_count, default_step, log_level):
     step_interval_sec = 0.01  # timer delay
     step_interval_msec = 50  # hack delay including serial polling time
 
-    logger.info("type something and press the end_char")
+    logger.info("type something and press and hit enter (newline)")
     while True:
         # https://github.com/todbot/circuitpython-tricks#read-user-input-from-usb-serial-non-blocking-mostly
         # read until newline, echo back chars - non blocking
@@ -268,4 +265,7 @@ import adafruit_logging as logging
 target_neopixels = board.NEOPIXEL
 num_neopixels = 8  # max we support anyway
 default_step = ColorStep(0xFF, (0, 0, 0), 1000)
-main(target_neopixels, num_neopixels, default_step, logging.INFO)
+logger = logging.getLogger("main")
+logger.setLevel(logging.INFO)
+
+main(target_neopixels, num_neopixels, default_step, logger)
