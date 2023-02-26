@@ -241,7 +241,7 @@ def main(neopixel_pin, neopixel_count, default_step, logger):
             elif mystr == "G":
                 print(active_patterns[active_pattern_index])
             else:
-                print(f"Unrecognized: {mystr}")
+                logger.error(f"Unrecognized command: '{mystr}'")
         time.sleep(step_interval_sec)  # do something time critical
         if len(active_patterns) > 0:
             pattern = active_patterns[active_pattern_index]
