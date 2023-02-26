@@ -227,12 +227,11 @@ def main(neopixel_pin, neopixel_count, default_step, logger):
                         pass  # ignore empty
                 pixel_control.updateColor(active_patterns[active_pattern_index])
             elif mystr == "?":
-                print("Usage: [? | # | b]")
-                print("?: this help")
-                print("B: blank pixels")
-                print("G: get current color and status")
-                print("#nnrrggbb-msec#nnrrggbb-msec")
-                print("#ff400000-1000#ff000040-1000")
+                print("Usage: [? | # | B | G]")
+                print("  ?: this help")
+                print("  B: blank pixels")
+                print("  G: get current color and status")
+                print("  #nnrrggbb-msec#nnrrggbb-msec Ex: #ff400000-1000#ff000040-1000")
             elif mystr == "B":
                 # blank
                 active_patterns = [default_step]

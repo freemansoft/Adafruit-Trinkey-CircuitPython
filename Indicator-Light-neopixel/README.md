@@ -108,6 +108,7 @@ You can copy and paste these strings into a terminal prompt
 | `#04A1A2A3-X8888#00E1E2E3-0010` | Non hex characters. Not Accepted |
 | `#00000000`                     | Accepted. Essentially a No-Op because no LED is is changed |
 
+## Program Output
 ```mermaid
 flowchart TD
 subgraph UsedFor["Used For"]
