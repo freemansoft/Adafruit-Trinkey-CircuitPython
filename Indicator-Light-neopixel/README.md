@@ -9,7 +9,7 @@ Requires the following added to `CIRCUITPY/lib`.
     * Part of the base CircuitPython base image for boards with onboard Neopixels Ex: _Adafruit Trinkey Neo_
 
 ## Setup
-"device" returns to the circuitpython board
+_device_ in the following steps refers to to the circuitpython board
 
 1. Plugin the device and verify that the /CIRCUITPY drive is mounted _windows or linux or mac_
 1. Copy the `adafruit_logging` library to /lib
