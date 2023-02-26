@@ -1,5 +1,7 @@
 ## main.py
-This is a **CircuitPython** program that controls a neopixel string over a serial port.  It was written for the [Adafruit Trinkey Neo](https://www.adafruit.com/product/4870) with 4 Neopixels on it.
+This is a **CircuitPython** program that controls device on-board Neopixels over a serial port.  It was written for the [Adafruit Trinkey Neo with 4 Neopixels](https://www.adafruit.com/product/4870) on it. It can be modified for external Neopixel Strings.
+
+The idea was to integrate it with host programs to use this as a busy or meeting status light.
 
 ## Prerequisites
 Requires the following added to `CIRCUITPY/lib`.
