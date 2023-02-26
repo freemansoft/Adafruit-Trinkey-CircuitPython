@@ -201,7 +201,7 @@ def main(neopixel_pin, neopixel_count, default_step, log_level):
     step_interval_sec = 0.01  # timer delay
     step_interval_msec = 50  # hack delay including serial polling time
 
-    print("type something and press the end_char")
+    logger.info("type something and press the end_char")
     while True:
         # https://github.com/todbot/circuitpython-tricks#read-user-input-from-usb-serial-non-blocking-mostly
         # read until newline, echo back chars - non blocking
