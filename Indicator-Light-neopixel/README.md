@@ -45,6 +45,8 @@ _device_ in the following steps refers to to the circuitpython board
 | # | pixel control with optonal duration - See _Pixel Control Message_ |
 | G | Get current pixel |
 | B | Blank all pixels |
+| LD | Change logging to `logging.DEBUG` |
+| LI | Change logging to `logging.INFO` |
 
 
 ## Pixel Control Message explained
@@ -111,12 +113,16 @@ You can copy and paste these strings into a terminal prompt
 ## Program Output
 ```mermaid
 flowchart TD
-subgraph UsedFor["Used For"]
-a["print()\nUsed only for command line help"]
-b["logger.debug()\nDisabled by default\nUseful for triage" ]
-c["logger.info()\nReady for input prompt"]
-d["logger.error()\nEnabled by default" ]
-end
+    p["print()\nUsed only for command line help"]
+    l["adafruit logger"]
+    subgraph UsedFor["Logging Levels"]
+        b["logger.debug()\n\nUseful for triage\n\nDisabled by default" ]
+        c["logger.info()\n\nPrompting for Input\n\nEnabled by default"]
+        d["logger.error()\n\nAll processing problems\n\nEnabled by default" ]
+    end
+    l -->b
+    l -->c
+    l -->d
 ```
 ## References
 

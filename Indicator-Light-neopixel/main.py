@@ -1,45 +1,27 @@
-"""
-CircuitPython
-Requires the following added to lib.
-Some boards already have neopixel installed in their image
-    adafruit_logging.py
-    neopixel
-Adjust the logging level in the call to main() at the bottom
-    logging.DEBUG vs logging.INFO
-Configure the Neopixel pin object and pixel count in call to main() at bottom
+# CircuitPython
+# Requires thse libraries in /lib
+#     adafruit_logging.py
+#     neopixel
 
-Tested on Adafruit Trinkey Neo
+# Tested on Adafruit Trinkey Neo
 
-Reads messages over serial in this format
-#<led><red><green><blue>-<time in msec>\n
+# Reads messages over serial in this format
+# #<led><red><green><blue>-<time in msec>\n
 
-<led> ff means all leds
-<time in msec> period defaults to 1000 msec if no time provided
+# <led> ff means all leds
+# <time in msec> period defaults to 1000 msec if no time provided
 
-New commands completely replace the previous patterns
-Uses a new line as a command terminator unlike some lights that stream
+# New commands completely replace the previous patterns
+# Uses a new line as a command terminator unlike some lights that stream
 
-
-Valid test data
-#ff000000
-#ff010222
-Clear the colors and then update one at a time
-#ff000000-10#00050505-100#01100000-100#02001000-100#03000010-100
-Bad Data that is accepted
-#00A1A2A300-8888#00E1E2E3-0010
-Bad Data
-#000000
-"""
 import time
 import board
 import neopixel
 
 
 class USBSerialReader:
-    """
-    Read a line from USB Serial (up to end_char), non-blocking, with optional echo
-    https://github.com/todbot/circuitpython-tricks#read-user-input-from-usb-serial-non-blocking-mostly
-    """
+    # Read a line from USB Serial (up to end_char), non-blocking, with optional echo
+    # https://github.com/todbot/circuitpython-tricks#read-user-input-from-usb-serial-non-blocking-mostly
 
     import adafruit_logging as logging
 
@@ -66,9 +48,9 @@ class USBSerialReader:
 
 class ColorStep:
     """
-    led is the led number - currently ignored
-    rgb is a tuple of rgb values (r,g,b)
-    hold_time is the time in msec to hold the color - currently ignored
+    led: is the led number
+    rgb: is a tuple of rgb values (r,g,b)
+    hold_time: is the time in msec to hold the color
     """
 
     import adafruit_logging as logging
@@ -83,11 +65,11 @@ class ColorStep:
         self.current_timer = 0
 
     def __str__(self):
-        """Printing an individual ColorStep invokes this"""
+        # Printing an individual ColorStep invokes this
         return f"({self.led},{self.rgb},{self.hold_time},{self.current_timer})"
 
     def __repr__(self):
-        """Printing a list of ColorStep invokes this"""
+        # Printing a list of ColorStep invokes this
         return f"({self.led},{self.rgb},{self.hold_time},{self.current_timer})"
 
 
@@ -103,9 +85,7 @@ class CommandProcessor:
         self.logger = logger
 
     def colorDuration(self, command_string):
-        """
-        returns time in msec or 0 if no time specified
-        """
+        # returns time in msec or 0 if no time specified
         parts = command_string.split("-")
         if len(parts) == 2:
             try:
@@ -117,7 +97,7 @@ class CommandProcessor:
             return 0
 
     def colorSpecified(self, color_segment):
-        """returns None if invalid color"""
+        # returns None if invalid color
         try:
             red = int(color_segment[2:4], 16)
             green = int(color_segment[4:6], 16)
@@ -129,10 +109,9 @@ class CommandProcessor:
             raise e
 
     def processCommand(self, command_string):
-        """
-        returns a tuple (led_number, (r,g,b), hold_time)
-        returns None if nothing could be processed
-        """
+        # returns a tuple (led_number, (r,g,b), hold_time)
+        # returns None if nothing could be processed
+
         self.logger.debug(f"processing: {command_string}")
         command_segements = command_string.split("-")
         try:
@@ -149,10 +128,8 @@ class CommandProcessor:
 
 
 class PixelControl:
-    """
-    Neopixel control is managed in this class
-    Understands fill and individual sets based on ColorSteps
-    """
+    # Neopixel control is managed in this class
+    # Understands fill and individual sets based on ColorSteps
 
     import adafruit_logging as logging
 
@@ -198,7 +175,7 @@ def main(neopixel_pin, neopixel_count, default_step, logger):
     step_interval_sec = 0.01  # timer delay
     step_interval_msec = 50  # hack delay including serial polling time
 
-    logger.info("type something and press and hit enter (newline)")
+    logger.info("supply command terminated by newline")
     while True:
         # https://github.com/todbot/circuitpython-tricks#read-user-input-from-usb-serial-non-blocking-mostly
         # read until newline, echo back chars - non blocking
@@ -227,11 +204,13 @@ def main(neopixel_pin, neopixel_count, default_step, logger):
                         pass  # ignore empty
                 pixel_control.updateColor(active_patterns[active_pattern_index])
             elif mystr == "?":
-                print("Usage: [? | # | B | G]")
-                print("  ?: this help")
-                print("  B: blank pixels")
-                print("  G: get current color and status")
-                print("  #nnrrggbb-msec#nnrrggbb-msec Ex: #ff400000-1000#ff000040-1000")
+                print("Usage: [?|#|B|G|LI|LD]")
+                print("  ?: help")
+                print("  B: blank")
+                print("  G: get current")
+                print("  #nnrrggbb-msec")
+                print("  LD: logger.DEBUG")
+                print("  LI: logger.INFO")
             elif mystr == "B":
                 # blank
                 active_patterns = [default_step]
@@ -239,8 +218,12 @@ def main(neopixel_pin, neopixel_count, default_step, logger):
                 pixel_control.updateColor(active_patterns[0])
             elif mystr == "G":
                 print(active_patterns[active_pattern_index])
+            elif mystr == "LD":
+                logger.setLevel(logging.DEBUG)
+            elif mystr == "LI":
+                logger.setLevel(logging.INFO)
             else:
-                logger.error(f"Unrecognized command: '{mystr}'")
+                logger.error(f"Unrecognized: '{mystr}'")
         time.sleep(step_interval_sec)  # do something time critical
         if len(active_patterns) > 0:
             pattern = active_patterns[active_pattern_index]
