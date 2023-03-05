@@ -5,7 +5,7 @@ Explorations on the [Adafruit Neo Trinkey - SAMD21 USB Key with 4 NeoPixels](htt
 ## projects
 1. `capacitive-touch` the copacitive touch demo with better LED control
 1. `capacitive-touch-belay` the capacative touch demo with better LED control managed by `belay`
-1. `indicator-light` a command line based indicator light to be used as  a status light
+1. `indicator-light` a command line based NeoPixel indicator light to be used as 1 or more status indicators.
 
 ## How does a Trinkey Neo Report on USB
 
