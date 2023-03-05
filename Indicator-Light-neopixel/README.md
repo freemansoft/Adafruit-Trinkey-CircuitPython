@@ -105,7 +105,7 @@ You can copy and paste these strings into a terminal prompt
 ### Bad test data
 | Sample | Expected results |
 | - | - |
-| `#ff01020300-080#ffE1E2E3-0010` | Accepted because _extra_ data in a step is ignored |
+| `#ff01020300-080#ff111213-0010` | Accepted because _extra_ data in a step is ignored |
 | `#000000`                       | Incomplete data. Not accepted |
 | `#ffJJJJJJ00`                   | Invalid Numeric. Not accepted |
 | `#04A1A2A3-X8888#00E1E2E3-0010` | Non hex characters. Not Accepted |
