@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2022 Joe Freeman joe@freemansoft.com
+#
+# SPDX-License-Identifier: MIT
+#
 # CircuitPython
 # Requires thse libraries in /lib
 #     adafruit_logging.py

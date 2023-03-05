@@ -1,7 +1,14 @@
+# SPDX-FileCopyrightText: 2022 Joe Freeman joe@freemansoft.com
+#
+# SPDX-License-Identifier: MIT
+#
+
 from belay import Device
 
 
 class MyDevice(Device):
+
+    # Note that the setup() function runs in global scope in belay which Pylance doesn't know about.
     # NOTE: ``Device`` is captialized here!
     @Device.setup(
         autoinit=True
