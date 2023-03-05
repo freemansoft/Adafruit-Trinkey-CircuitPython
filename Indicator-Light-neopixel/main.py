@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: 2022 Joe Freeman joe@freemansoft.com
-#
-# SPDX-License-Identifier: MIT
-#
 # CircuitPython
 # Requires thse libraries in /lib
 #     adafruit_logging.py
@@ -202,17 +198,22 @@ def main(neopixel_pin, neopixel_count, default_step, logger):
                         if a_color_step:
                             active_patterns.append(a_color_step)
                         else:
+                            # invalid colors map to default
                             active_patterns.append(default_step)
-                        logger.debug(f"active_patterns: {active_patterns}")
                     else:
-                        pass  # ignore empty
-                pixel_control.updateColor(active_patterns[active_pattern_index])
+                        pass  # empty steps are ignored
+                logger.debug(f"active_patterns: {active_patterns}")
+                try:
+                    pixel_control.updateColor(active_patterns[active_pattern_index])
+                except IndexError:  # happens if # was sent with no valid data
+                    pixel_control.updateColor(default_step)
+                    pass
             elif mystr == "?":
                 print("Usage: [?|#|B|G|LI|LD]")
                 print("  ?: help")
                 print("  B: blank")
                 print("  G: get current")
-                print("  #nnrrggbb-msec")
+                print("  #nnrrggbb-msec[#nnrrggbb-msec]")
                 print("  LD: logger.DEBUG")
                 print("  LI: logger.INFO")
             elif mystr == "B":
@@ -229,6 +230,7 @@ def main(neopixel_pin, neopixel_count, default_step, logger):
             else:
                 logger.error(f"Unrecognized: '{mystr}'")
         time.sleep(step_interval_sec)  # do something time critical
+        # TODO: This should be mvoed to its own function
         if len(active_patterns) > 0:
             pattern = active_patterns[active_pattern_index]
             pattern.current_timer = pattern.current_timer + int(step_interval_msec)
@@ -239,10 +241,10 @@ def main(neopixel_pin, neopixel_count, default_step, logger):
                 )
                 if new_active_pattern_index != active_pattern_index:
                     active_pattern_index = new_active_pattern_index
-                    # logger.debug(f"Moving to pattern {active_pattern_index}")
+                    logger.debug(f"Moving to pattern {active_pattern_index}")
                     pixel_control.updateColor(active_patterns[active_pattern_index])
         else:
-            pass  # no active patterns
+            pass
 
 
 import adafruit_logging as logging

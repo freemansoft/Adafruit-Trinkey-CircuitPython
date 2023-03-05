@@ -54,7 +54,7 @@ The board accepts a string over the serial port that is terminated by a newline.
 
 `#<led><red><green><blue>-<time in msec>\n`
 
-New commands completely replace the previous patterns. The command is terminated by a new line `\n`
+New command set completely replace the previous patterns. The command is terminated by a new line `\n`
 
 The different parts of a command string are as followed
 | paramter | function | notes |
@@ -99,7 +99,8 @@ You can copy and paste these strings into a terminal prompt
 | `#ffA1A200-400#ff0040E3-1000`                | All pixels lternate between two color in asymmetrical periods |
 | `#ff010200-400#02004023-400#03000000-300`    | 3 step pattern that mixes full and individual pixel updates |
 | `#ff010200-400 #00004023-1000 #03000000-300` | 3 step pattern that mixes full and individual pixel updates |
-| `#ff000000-100 #01050505-400 #02100000-400 #04081000-400 #0c000010-400` | Clear the colors. Individually update 0 and 1 | set 2 and 3 (bit 4 and 8 ) at same time |
+| `#ff000000-100 #01050505-400 #02100000-400 #04081000-400 #0c000010-400` | Includes black step Clear the colors. Individually update 0 and 1 | set 2 and 3 (bit 4 and 8 ) at same time |
+| `#ff000000-001 #01050505-400 #02100000-400 #04081000-400 #08081000-400 #040000000-400 #0c000010-400` | Individually update 0, 1, 2, 3 (bit 0,1,2,4) : clears 4 : set 2 and 3 (bit 4 and 8 ) at same time |
 
 ### Bad test data
 | Sample | Expected results |
