@@ -88,7 +88,8 @@ end
 ```
 
 ### Sample test data
-You can copy and paste these strings into a terminal prompt
+You can copy and paste these strings into a terminal prompt.
+Note that there is some memory limit on the length of the pattern.
 
 | Sample | Expected results |
 | - | - |

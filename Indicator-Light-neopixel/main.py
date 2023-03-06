@@ -1,16 +1,20 @@
+# SPDX-FileCopyrightText: 2022 Joe Freeman joe@freemansoft.com
+#
+# SPDX-License-Identifier: MIT
+#
 # CircuitPython
 # Requires thse libraries in /lib
 #     adafruit_logging.py
 #     neopixel
-
+#
 # Tested on Adafruit Trinkey Neo
-
+#
 # Reads messages over serial in this format
 # #<led><red><green><blue>-<time in msec>\n
-
+#
 # <led> ff means all leds
 # <time in msec> period defaults to 1000 msec if no time provided
-
+#
 # New commands completely replace the previous patterns
 # Uses a new line as a command terminator unlike some lights that stream
 
