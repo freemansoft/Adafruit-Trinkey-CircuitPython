@@ -3,9 +3,9 @@
 Explorations on the [Adafruit Neo Trinkey - SAMD21 USB Key with 4 NeoPixels](https://www.adafruit.com/product/4870) using CircuitPython as Adafruit intended!
 
 ## projects
-1. `capacitive-touch` the copacitive touch demo with better LED control
-1. `capacitive-touch-belay` the capacative touch demo with better LED control managed by `belay`
-1. `indicator-light` a command line based NeoPixel indicator light to be used as 1 or more status indicators.
+1. [`capacitive-touch` the copacitive touch demo with better LED control](Neo/capacitive-touch)
+1. [`capacitive-touch-belay` the capacative touch demo with better LED control managed by `belay`](Neo/capacitive-touch-belay)
+1. [`indicator-light` a command line based NeoPixel indicator light to be used as 1 or more status indicators.](indicator-Light-neopixel)
 
 ## How does a Trinkey Neo Report on USB
 
