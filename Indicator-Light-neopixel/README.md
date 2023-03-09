@@ -41,12 +41,14 @@ _device_ in the following steps refers to to the circuitpython board
 ## Commands
 | Command | Action |
 | - | - |
-| ? | show commands |
-| # | pixel control with optonal duration - See _Pixel Control Message_ |
-| G | Get current pixel |
-| B | Blank all pixels |
-| LD | Change logging to `logging.DEBUG` |
-| LI | Change logging to `logging.INFO` |
+| ?    | show commands |
+| help | show commands |
+| #    | pixel control with optonal duration - See _Pixel Control Message_ |
+| G    | Get current pixel |
+| B    | Blank all pixels |
+| LD   | Change logging to `logging.DEBUG` |
+| LI   | Change logging to `logging.INFO` |
+| \n   | Empty new line replies with OK
 
 
 ## Pixel Control Message explained

@@ -179,7 +179,8 @@ def main(neopixel_pin, neopixel_count, default_step, logger):
     step_interval_sec = 0.01  # timer delay
     step_interval_msec = 50  # hack delay including serial polling time
 
-    logger.info("supply command terminated by newline")
+    logger.debug("supply command terminated by newline")
+    print("OK")
     while True:
         # https://github.com/todbot/circuitpython-tricks#read-user-input-from-usb-serial-non-blocking-mostly
         # read until newline, echo back chars - non blocking
@@ -212,14 +213,15 @@ def main(neopixel_pin, neopixel_count, default_step, logger):
                 except IndexError:  # happens if # was sent with no valid data
                     pixel_control.updateColor(default_step)
                     pass
-            elif mystr == "?":
-                print("Usage: [?|#|B|G|LI|LD]")
+            elif mystr == "?" or mystr == "help":
+                print("Usage: [?|#|B|G|LD|LI]")
                 print("  ?: help")
                 print("  B: blank")
                 print("  G: get current")
                 print("  #nnrrggbb-msec[#nnrrggbb-msec]")
                 print("  LD: logger.DEBUG")
                 print("  LI: logger.INFO")
+                print("  \\n 'OK'")
             elif mystr == "B":
                 # blank
                 active_patterns = [default_step]
@@ -231,6 +233,8 @@ def main(neopixel_pin, neopixel_count, default_step, logger):
                 logger.setLevel(logging.DEBUG)
             elif mystr == "LI":
                 logger.setLevel(logging.INFO)
+            elif mystr == "":
+                print("OK")
             else:
                 logger.error(f"Unrecognized: '{mystr}'")
         time.sleep(step_interval_sec)  # do something time critical
